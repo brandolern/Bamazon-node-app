@@ -17,7 +17,7 @@ connection.connect(function (err) {
 function start() {
     var divider = "=====================================";
     var query = connection.query("SELECT * FROM products", function (err, res) {
-        console.log("PRODUCT LIST:\n" + divider);
+        console.log("\nPRODUCT LIST:\n" + divider);
         for (i = 0; i < res.length; i++) {
             console.log("\nId:" + res[i].id + "\nName: " + res[i].product_name + "\nPrice: $" + res[i].price);
         }
@@ -51,10 +51,49 @@ function pickProduct() {
                 }
             }
         ]).then(function (answers) {
-            var query = connection.query("SELECT stock_quantity FROM products WHERE id= " + answers.id,
+            var query = connection.query("SELECT * FROM products WHERE id= " + answers.id,
                 function (err, res) {
+
                     if (err) throw err;
-                    console.log("Quantity Remaining: " + res);
+                    var quantity = res[0].stock_quantity;
+                    var amountOrdered = answers.amount;
+                    var total = res[0].price * amountOrdered;
+                    var id = answers.id;
+
+                    if (quantity >= amountOrdered && quantity > 0) {
+                        console.log("Total Purchase: $" + total);
+
+                        inquirer
+                            .prompt({
+                                name: "verify",
+                                type: "list",
+                                message: "Please verify your purchase",
+                                choices: ["Verify", "Cancel"]
+                            }).then(function (answers) {
+
+                                if (answers.verify === "Verify") {
+                                    connection.query("UPDATE products SET ? WHERE ?", [{
+                                        stock_quantity: quantity - amountOrdered
+                                    }, {
+                                        id: id
+                                    }], function (err) {
+                                        if (err) throw err;
+                                    });
+
+                                    console.log(`Purchase confirmed\n${amountOrdered} ${res[0].product_name}s\nTotal: $${total}`);
+                                    setTimeout(function () {
+                                        start()
+                                    }, 1500);
+
+                                } else {
+                                    console.log("\nTransaction cancelled\n");
+                                    pickProduct();
+                                }
+                            });
+                    } else {
+                        console.log("\nInsufficient quantity!\n")
+                        pickProduct();
+                    };
                 })
         })
 }
