@@ -31,7 +31,7 @@ function pickProduct() {
         .prompt([{
                 name: "id",
                 type: "input",
-                message: "What is the ID of the product you'd like to buy?",
+                message: "Enter the ID of the product you'd like to buy?",
                 validate: function (value) {
                     if (isNaN(value) === false) {
                         return true;
