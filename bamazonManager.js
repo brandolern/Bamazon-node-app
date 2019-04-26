@@ -141,5 +141,53 @@ function addInventory() {
 
 
 function addProduct() {
+    console.log("\nAdd A New Product\n");
 
-}
+    inquirer
+        .prompt([{
+                name: "name",
+                type: "input",
+                message: "Enter Product Name:"
+            },
+            {
+                name: "department",
+                type: "input",
+                message: "Enter Department Name:"
+            },
+            {
+                name: "price",
+                type: "input",
+                message: "Enter Product Price:",
+                validate: function (value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    return false;
+                }
+            },
+            {
+                name: "quantity",
+                type: "input",
+                message: "Enter Quantity to Order:",
+                validate: function (value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+        ]).then(function (answers) {
+
+            connection.query("INSERT INTO products SET ?", {
+                product_name: answers.name,
+                department_name: answers.department,
+                price: answers.price,
+                stock_quantity: answers.quantity
+            }, function (err, res) {
+
+                if (err) throw err;
+                console.log(`\nAdded ${answers.name} to the product list`);
+                pause();
+            });
+        });
+};
