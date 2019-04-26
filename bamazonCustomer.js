@@ -19,9 +19,8 @@ function start() {
     var query = connection.query("SELECT * FROM products", function (err, res) {
         console.log("\nPRODUCT LIST:\n" + divider);
         for (i = 0; i < res.length; i++) {
-            console.log("\nId:" + res[i].id + "\nName: " + res[i].product_name + "\nPrice: $" + res[i].price);
+            console.log("Id:" + res[i].id + "\nName: " + res[i].product_name + "\nPrice: $" + res[i].price + "\n" + divider);
         }
-        console.log(divider);
         pickProduct();
     });
 };
@@ -80,7 +79,12 @@ function pickProduct() {
                                         if (err) throw err;
                                     });
 
-                                    console.log(`Purchase confirmed\n${amountOrdered} ${res[0].product_name}s\nTotal: $${total}`);
+                                    if (amountOrdered > 1) {
+                                        console.log(`Purchase confirmed\n${amountOrdered} ${res[0].product_name}s\nTotal: $${total}`);
+                                    } else {
+                                        console.log(`Purchase confirmed\n${amountOrdered} ${res[0].product_name}\nTotal: $${total}`);
+
+                                    }
                                     setTimeout(function () {
                                         start()
                                     }, 1500);
