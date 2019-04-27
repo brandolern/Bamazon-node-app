@@ -17,7 +17,9 @@ connection.connect(function (err) {
 function start() {
     var divider = "=====================================";
     var query = connection.query("SELECT * FROM products", function (err, res) {
+        if (err) throw err;
         console.log("\nPRODUCT LIST:\n" + divider);
+
         for (i = 0; i < res.length; i++) {
             console.log("Id:" + res[i].id + "\nName: " + res[i].product_name + "\nPrice: $" + res[i].price + "\n" + divider);
         }
@@ -57,7 +59,7 @@ function pickProduct() {
                     var quantity = res[0].stock_quantity;
                     var amountOrdered = answers.amount;
                     var total = res[0].price * amountOrdered;
-                    var id = answers.id;
+                    // var id = answers.id;
 
                     if (quantity >= amountOrdered && quantity > 0) {
                         console.log("Total Purchase: $" + total);
@@ -72,9 +74,10 @@ function pickProduct() {
 
                                 if (answers.verify === "Verify") {
                                     connection.query("UPDATE products SET ? WHERE ?", [{
-                                        stock_quantity: quantity - amountOrdered
+                                        stock_quantity: quantity - amountOrdered,
+                                        product_sales: total + res[0].product_sales
                                     }, {
-                                        id: id
+                                        id: answers.id
                                     }], function (err) {
                                         if (err) throw err;
                                     });
