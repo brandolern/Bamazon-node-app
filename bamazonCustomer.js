@@ -17,6 +17,7 @@ connection.connect(function (err) {
 function start() {
     var divider = "=====================================";
     var query = connection.query("SELECT * FROM products", function (err, res) {
+
         if (err) throw err;
         console.log("\nPRODUCT LIST:\n" + divider);
 
@@ -30,28 +31,27 @@ function start() {
 function pickProduct() {
     inquirer
         .prompt([{
-                name: "id",
-                type: "input",
-                message: "Enter the ID of the product you'd like to buy?",
-                validate: function (value) {
-                    if (isNaN(value) === false) {
-                        return true;
-                    }
-                    return false;
+            name: "id",
+            type: "input",
+            message: "Enter the ID of the product you'd like to buy?",
+            validate: function (value) {
+                if (isNaN(value) === false) {
+                    return true;
                 }
-            },
-            {
-                name: "amount",
-                type: "input",
-                message: "How many would you like to purchase?",
-                validate: function (value) {
-                    if (isNaN(value) === false) {
-                        return true;
-                    }
-                    return false;
-                }
+                return false;
             }
-        ]).then(function (answers) {
+        }, {
+            name: "amount",
+            type: "input",
+            message: "How many would you like to purchase?",
+            validate: function (value) {
+                if (isNaN(value) === false) {
+                    return true;
+                }
+                return false;
+            }
+        }])
+        .then(function (answers) {
             var query = connection.query("SELECT * FROM products WHERE id= " + answers.id,
                 function (err, res) {
 
@@ -59,7 +59,7 @@ function pickProduct() {
                     var quantity = res[0].stock_quantity;
                     var amountOrdered = answers.amount;
                     var total = res[0].price * amountOrdered;
-                    // var id = answers.id;
+                    var id = answers.id;
 
                     if (quantity >= amountOrdered && quantity > 0) {
                         console.log("Total Purchase: $" + total);
@@ -74,20 +74,18 @@ function pickProduct() {
 
                                 if (answers.verify === "Verify") {
                                     connection.query("UPDATE products SET ? WHERE ?", [{
-                                        stock_quantity: quantity - amountOrdered,
-                                        product_sales: total + res[0].product_sales
-                                    }, {
-                                        id: answers.id
-                                    }], function (err) {
-                                        if (err) throw err;
-                                    });
+                                            stock_quantity: quantity - amountOrdered,
+                                            product_sales: total + res[0].product_sales
+                                        }, {
+                                            id: id
+                                        }],
+                                        function (err) {
+                                            if (err) throw err;
+                                        });
 
-                                    if (amountOrdered > 1) {
-                                        console.log(`Purchase confirmed\n${amountOrdered} ${res[0].product_name}s\nTotal: $${total}`);
-                                    } else {
-                                        console.log(`Purchase confirmed\n${amountOrdered} ${res[0].product_name}\nTotal: $${total}`);
+                                    if (amountOrdered > 1) console.log(`Purchase confirmed\n${amountOrdered} ${res[0].product_name}s\nTotal: $${total}`);
+                                    else console.log(`Purchase confirmed\n${amountOrdered} ${res[0].product_name}\nTotal: $${total}`);
 
-                                    }
                                     setTimeout(function () {
                                         start()
                                     }, 1500);
@@ -101,6 +99,6 @@ function pickProduct() {
                         console.log("\nInsufficient quantity!\n")
                         pickProduct();
                     };
-                })
-        })
-}
+                });
+        });
+};

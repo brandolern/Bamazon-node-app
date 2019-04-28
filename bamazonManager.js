@@ -50,30 +50,29 @@ function pause() {
 };
 
 function viewProducts() {
-
     var query = connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
         console.log("\nProducts For Sale:\n" + divider);
         for (i = 0; i < res.length; i++) {
-            console.log("Id:" + res[i].id + "\nName: " + res[i].product_name + "\nPrice: $" + res[i].price + "\nQuantity: " + res[i].stock_quantity + "\n" + divider);
+            console.log(`Id: ${res[i].id} \nName: ${res[i].product_name} \nPrice: $${res[i].price} \nQuantity: ${res[i].stock_quantity} \n${divider}`);
         };
         pause();
     });
-}
+};
 
 function lowInventory() {
-    var query = connection.query("SELECT id,product_name,stock_quantity FROM products HAVING stock_quantity <= 5", function (err, res) {
+    var query = connection.query("SELECT id, product_name, stock_quantity FROM products HAVING stock_quantity <= 5", function (err, res) {
         if (err) throw err;
-        console.log("\nLow Product Inventory:\n" + divider)
+        console.log("\nLow Product Inventory:\n" + divider);
+
         for (i = 0; i < res.length; i++) {
-            console.log("Id: " + res[i].id + "\nName: " + res[i].product_name + "\nQuantity: " + res[i].stock_quantity + "\n" + divider);
+            console.log(`Id: ${res[i].id} + "\nName: " + res[i].product_name + "\nQuantity: " + res[i].stock_quantity + "\n" + divider`);
         };
         pause();
     });
 };
 
 function addInventory() {
-
     console.log("\nAdd More Product to Inventory\n");
     inquirer
         .prompt([{
@@ -96,39 +95,35 @@ function addInventory() {
             var amount = parseFloat(answers.amount);
 
             if (isNaN(product) === false) {
-                var query = `SELECT stock_quantity,product_name FROM products WHERE id=${product}`;
+                var query = `SELECT stock_quantity, product_name FROM products WHERE id = ${product}`;
 
                 connection.query(query, function (err, res) {
                     var name = res[0].product_name;
                     var quantity = res[0].stock_quantity + amount;
 
                     connection.query("UPDATE products SET ? WHERE ?", [{
-                                stock_quantity: quantity
-                            },
-                            {
-                                id: product
-                            }
-                        ],
+                            stock_quantity: quantity
+                        }, {
+                            id: product
+                        }],
                         function (err, res) {
                             if (err) throw err;
-                            console.log(`\nAdded ${amount} to Inventory \nNew ${name} Quantity: ${quantity}\n`);
+                            console.log(`\nAdded ${amount} to Inventory\nNew ${name} Quantity: ${quantity}\n`);
                             pause();
-                        })
+                        });
                 });
             } else {
-                var query = `SELECT stock_quantity,product_name FROM products WHERE product_name= '${product}'`;
+                var query = `SELECT stock_quantity, product_name FROM products WHERE product_name = '${product}'`;
 
                 connection.query(query, function (err, res) {
                     var name = res[0].product_name;
                     var quantity = res[0].stock_quantity + amount;
 
                     connection.query("UPDATE products SET ? WHERE ?", [{
-                                stock_quantity: quantity
-                            },
-                            {
-                                product_name: product
-                            }
-                        ],
+                            stock_quantity: quantity
+                        }, {
+                            product_name: product
+                        }],
                         function (err, res) {
                             if (err) throw err;
                             console.log(`Added ${amount} to Inventory \nNew ${name} Quantity: ${quantity}\n`);
@@ -139,55 +134,49 @@ function addInventory() {
         });
 };
 
-
 function addProduct() {
     console.log("\nAdd A New Product\n");
 
     inquirer
         .prompt([{
-                name: "name",
-                type: "input",
-                message: "Enter Product Name:"
-            },
-            {
-                name: "department",
-                type: "input",
-                message: "Enter Department Name:"
-            },
-            {
-                name: "price",
-                type: "input",
-                message: "Enter Product Price:",
-                validate: function (value) {
-                    if (isNaN(value) === false) {
-                        return true;
-                    }
-                    return false;
+            name: "name",
+            type: "input",
+            message: "Enter Product Name:"
+        }, {
+            name: "department",
+            type: "input",
+            message: "Enter Department Name:"
+        }, {
+            name: "price",
+            type: "input",
+            message: "Enter Product Price:",
+            validate: function (value) {
+                if (isNaN(value) === false) {
+                    return true;
                 }
-            },
-            {
-                name: "quantity",
-                type: "input",
-                message: "Enter Quantity to Order:",
-                validate: function (value) {
-                    if (isNaN(value) === false) {
-                        return true;
-                    }
-                    return false;
-                }
+                return false;
             }
-        ]).then(function (answers) {
-
+        }, {
+            name: "quantity",
+            type: "input",
+            message: "Enter Quantity to Order:",
+            validate: function (value) {
+                if (isNaN(value) === false) {
+                    return true;
+                }
+                return false;
+            }
+        }]).then(function (answers) {
             connection.query("INSERT INTO products SET ?", {
-                product_name: answers.name,
-                department_name: answers.department,
-                price: answers.price,
-                stock_quantity: answers.quantity
-            }, function (err, res) {
-
-                if (err) throw err;
-                console.log(`\nAdded ${answers.name} to the product list`);
-                pause();
-            });
+                    product_name: answers.name,
+                    department_name: answers.department,
+                    price: answers.price,
+                    stock_quantity: answers.quantity
+                },
+                function (err, res) {
+                    if (err) throw err;
+                    console.log(`\nAdded ${answers.name} to the product list`);
+                    pause();
+                });
         });
 };
