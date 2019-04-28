@@ -11,7 +11,7 @@ stock_quantity INT(100)NULL,
 PRIMARY KEY(id)
 );
 
-
+-- Query statement for supervisor node app table
 SELECT d.department_id, p.department_name, SUM(p.product_sales) "Total Sales",  d.over_head_costs "Over Head",
 SUM(p.product_sales)-d.over_head_costs "Total Profit"
 FROM  products p
