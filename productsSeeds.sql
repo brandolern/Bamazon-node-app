@@ -12,9 +12,8 @@ PRIMARY KEY(id)
 );
 
 -- Query statement for supervisor node app table
-SELECT d.department_id, p.department_name, SUM(p.product_sales) "Total Sales",  d.over_head_costs "Over Head",
-SUM(p.product_sales)-d.over_head_costs "Total Profit"
-FROM  products p
-LEFT JOIN departments d ON d.department_name = p.department_name 
-GROUP BY department_name 
-ORDER BY department_id;
+SELECT d.department_id, d.department_name,
+CASE WHEN SUM(p.product_sales) IS NULL THEN 0 ELSE SUM(p.product_sales) END AS total_sales, d.over_head_costs over_head, 
+CASE WHEN SUM(p.product_sales) - d.over_head_costs IS NULL THEN 0 ELSE SUM(p.product_sales) - d.over_head_costs END AS total_profit
+FROM  departments d LEFT JOIN products p ON d.department_name = p.department_name 
+GROUP BY department_name ORDER BY department_id;

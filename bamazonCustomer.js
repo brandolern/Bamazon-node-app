@@ -22,7 +22,7 @@ function start() {
         console.log("\nPRODUCT LIST:\n" + divider);
 
         for (i = 0; i < res.length; i++) {
-            console.log("Id:" + res[i].id + "\nName: " + res[i].product_name + "\nPrice: $" + res[i].price + "\n" + divider);
+            console.log(`Id: ${res[i].id} \nName: ${res[i].product_name} \nPrice: $${res[i].price} \n${divider}`);
         }
         pickProduct();
     });

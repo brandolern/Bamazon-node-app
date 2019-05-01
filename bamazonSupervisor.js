@@ -45,6 +45,7 @@ function productSales() {
     var query = "SELECT d.department_id, d.department_name, SUM(p.product_sales) total_sales, d.over_head_costs over_head,";
     query += "SUM(p.product_sales) - d.over_head_costs total_profit FROM departments d LEFT JOIN products p ON"
     query += " d.department_name = p.department_name GROUP BY department_name ORDER BY department_id;"
+
     connection.query(query, function (err, res) {
         if (err) throw err;
 
@@ -61,10 +62,10 @@ function productSales() {
                 values.push(obj[property]);
             };
 
-            values = values.map(function (x) {
-                if (x === null) return x = 0;
-                return x;
-            });
+            // values = values.map(function (x) {
+            //     if (x === null) return x = 0;
+            //     return x;
+            // });
 
             table.push([values[0], values[1], values[2], values[3], values[4]]);
         }
