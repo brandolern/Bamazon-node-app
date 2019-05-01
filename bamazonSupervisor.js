@@ -62,10 +62,10 @@ function productSales() {
                 values.push(obj[property]);
             };
 
-            // values = values.map(function (x) {
-            //     if (x === null) return x = 0;
-            //     return x;
-            // });
+            values = values.map(function (x) {
+                if (x === null) return x = 0;
+                return x;
+            });
 
             table.push([values[0], values[1], values[2], values[3], values[4]]);
         }
