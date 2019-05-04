@@ -66,7 +66,7 @@ function lowInventory() {
         console.log("\nLow Product Inventory:\n" + divider);
 
         for (i = 0; i < res.length; i++) {
-            console.log(`Id: ${res[i].id} + "\nName: " + res[i].product_name + "\nQuantity: " + res[i].stock_quantity + "\n" + divider`);
+            console.log(`Id: ${res[i].id} \nName: ${res[i].product_name} \nQuantity: ${res[i].stock_quantity} \n${divider}`);
         };
         pause();
     });
