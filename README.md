@@ -41,10 +41,10 @@ The third option allows the manager to increase the quantity of any of the itmes
  There is a second table in the database that contains all the depts containing the products, as well as the over head costs of each of the depts. The view product sales by dept. option creates a cli table using the "cli-table" node package which joins the two tables on the dept name column. It then sums up the total sales of each dept, subtracts the over head costs of each dept from the total sales, then spits that value into the total profit column. 
 * Here's a picture for reference: 
     * ![Bamazon Supervisor Image](https://github.com/brandolern/bamazon-node-app/blob/master/images/supervisor2.png)
-The final option allows the supervisor to create a new dept, which is where the over head costs column comes from. Here's an example of adding the "grocery" dept then viewing the product sales table after it was created:
+* The final option allows the supervisor to create a new dept, which is where the over head costs column comes from. Here's an example of adding the "grocery" dept then viewing the product sales table after it was created:
 * ![Bamazon Supervisor Image](https://github.com/brandolern/bamazon-node-app/blob/master/images/supervisor3.png)
 
 ## Notes
-A weird problem I ran into using the cli table node app was that it throws an error anytime a value that is null is passed into it. This was a problem because anytime a new dept was created the total sales value would come back as null because a product had not been added into that dept yet. I found two solutions: using cases in mysql to change the null value to 0, or run a map() function on the table array after the values had already been pulled out of the query response, which can also change the null values to 0. 
+A weird problem I ran into using the cli table node app was that it throws an error anytime a value that is null is passed into it. This was a problem because anytime a new dept was created the total sales value would come back as null because a product had not been added into that dept yet. I found two solutions: using cases in mysql to change the null value to 0, or run a map() function on the table array after the values had already been pulled out of the query response, which can also change the null values to 0. I ended up going with the map function.
 
 
