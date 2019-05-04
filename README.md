@@ -5,9 +5,9 @@ The app is split into three different parts: customer, manager, and supervisor. 
 ##Bamazon Customer
 The customer portion of the application allows users to view the list of products and purchase any of those products by typing in the product's unique id. Their is a quantity field for each item that decreases when products are purchased. If the amount the user is trying to purchase is greater than the current quantity of the product or if the products quantity is at 0 then the purchase won't go through. If the quantity is great enough, the user will be asked to verify the purchase. Once it is verified, the purchase goes through, and the user is brought back to the product list to choose another item.
 Here's an example of the product list:
-![Bamazon Customer Image](https://github.com/brandolern/bamazon-node-app/blob/master/images/bcust1.png)
+[Image](https://github.com/brandolern/bamazon-node-app/blob/master/images/bcust1.png)
 Here's an example of a purchase from beginning to end:
-![Bamazon Customer Image](https://github.com/brandolern/bamazon-node-app/blob/master/images/bcust2.png)
+[Bamazon Customer Image](https://github.com/brandolern/bamazon-node-app/blob/master/images/bcust2.png)
 Here's an exmaple of trying to purchase a product that the quantity is too low on:
 ![Bamazon Customer Image](https://github.com/brandolern/bamazon-node-app/blob/master/images/bcust3.png)
 Here's an example of what happens if the user hits cancel instead of verifying the purchase:
@@ -17,7 +17,7 @@ Here's an example of what happens if the user hits cancel instead of verifying t
 The manager portion of the application has four different functionalities: viewing the product list, view products that have a quantity of 5 or less, add items to inventory(increase quantity), or add a new product to the list. Here's a picture of all the options:
 ![Bamazon Manager Image](https://github.com/brandolern/bamazon-node-app/blob/master/images/manager1.png)
 The first option, viewing the product list, queries the database for all the products, similar to the customer's product list, but includes the quantity of all the products. Here's an example picture of the list: 
-![Bamazon Manager Image](https://github.com/brandolern/bamazon-node-app/blob/master/images/manager2.png)
+[Bamazon Manager Image](https://github.com/brandolern/bamazon-node-app/blob/master/images/manager2.png)
 The second option queries the database and makes a list of all the products that have a quantity of 5 or less. Here's an example picture: 
 ![Bamazon Manager Image](https://github.com/brandolern/bamazon-node-app/blob/master/images/manager3.png)
 The third option allows the manager to increase the quantity of any of the itmes in the list. A cool feature that was added is being able to access the items either by their unique id, or by name. Here's an example of adding inventory by id: 
